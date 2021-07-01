@@ -33,6 +33,27 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function answer_votes()
+    {
+        $this->belongsToMany(Answer::class);
+    }
+
+    public function question_votes()
+    {
+        $this->belongsToMany(Question::class);
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+
     /**
      * The attributes that should be cast to native types.
      *
