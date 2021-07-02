@@ -14,9 +14,10 @@ class Question extends Model
         return $this->hasMany(Question::class);
     }
 
-    public function user_votes()
+    public function user_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class,'question_user','user_id',
+            'question_id','id','id');
     }
 
 }

@@ -33,26 +33,27 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function answer_votes()
+    public function answer_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        $this->belongsToMany(Answer::class);
+        return $this->belongsToMany(Answer::class,'answer_user','answer_id',
+            'user_id','id','id');
     }
 
-    public function question_votes()
+    public function question_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        $this->belongsToMany(Question::class);
+        return $this->belongsToMany(Question::class,'question_user','question_id',
+        'user_id','id','id');
     }
 
-    public function questions()
+    public function questions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Question::class);
     }
 
-    public function answers()
+    public function answers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Answer::class);
     }
-
 
     /**
      * The attributes that should be cast to native types.

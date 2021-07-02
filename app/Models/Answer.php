@@ -9,9 +9,10 @@ class Answer extends Model
 {
     use HasFactory;
 
-    public function user_votes()
+    public function user_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class,'answer_user', 'user_id',
+            'answer_id', 'id','id');
     }
 
 }

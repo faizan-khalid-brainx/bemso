@@ -14,13 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::post('login','');
+Route::post('/login',[App\Http\Controllers\Api\AuthController::class,'login'])
+    ->name('auth.login');
+
+Route::post('/logout',[App\Http\Controllers\Api\AuthController::class,'logout'])
+    ->name('auth.logout');
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('test',function (){
-        dd('test');
+        return response(['message'=>'success'],200);
     });
 });
