@@ -35,13 +35,13 @@ class User extends Authenticatable
 
     public function answer_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Answer::class,'answer_user','answer_id',
+        return $this->belongsToMany(Answer::class,'answer_vote','answer_id',
             'user_id','id','id');
     }
 
     public function question_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Question::class,'question_user','question_id',
+        return $this->belongsToMany(Question::class,'question_vote','question_id',
         'user_id','id','id');
     }
 

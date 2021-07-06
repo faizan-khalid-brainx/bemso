@@ -9,14 +9,16 @@ class Question extends Model
 {
     use HasFactory;
 
-    public function answers()
+    protected $guarded =[];
+
+    public function answers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Question::class);
     }
 
     public function user_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(User::class,'question_user','user_id',
+        return $this->belongsToMany(User::class,'question_vote','user_id',
             'question_id','id','id');
     }
 
