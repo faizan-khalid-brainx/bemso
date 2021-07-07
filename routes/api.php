@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\QuestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login',[App\Http\Controllers\Api\AuthController::class,'login'])
-    ->name('auth.login');
+Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'login'])
+    ->name('login');
 
-Route::post('/logout',[App\Http\Controllers\Api\AuthController::class,'logout'])
+Route::get('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout'])
     ->name('auth.logout');
 
+
+Route::get('/show-question',[App\Http\Controllers\QuestionController::class,'display'])
+    ->name('question.display');
+
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('test',function (){
-        return response(['message'=>'success'],200);
+    Route::get('test', function () {
+        return response(['message' => 'success'], 200);
     });
+    Route::post('/question', [QuestionController::class, 'store'])
+        ->name('question.store');
 });
