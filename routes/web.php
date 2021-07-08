@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Route for testing controller functions
+Route::get('test',function (){
+    dd(App\Models\Question::with('user')->get()[0]->getRelation('user'));
+});
