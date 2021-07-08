@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class AnswerVote extends Model
+class AnswerVote extends Pivot
 {
+    // overrides laravel default database naming convention for Eloquent
+    protected $table = 'answer_vote';
+    protected $guarded = [];
     use HasFactory;
 }
