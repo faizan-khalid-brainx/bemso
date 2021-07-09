@@ -37,17 +37,34 @@ class QuestionController extends Controller
         // extract user attributes for question
         $question['user'] = (object)Arr::only($queryResult->getRelation('user')
             ->getAttributes(), ['id', 'name', 'email']);
-        // votes logic is not implemented yet !!!
-        $question['vote'] = 0;
+        // votes extracting question votes
+        $vote = $queryResult->getRelations()['user_votes']->map(function ($user) {
+            return $user->getOriginal()['pivot_vote'];
+        });
+        $vote = array_count_values($vote->toArray());
+        if (!array_key_exists(0, $vote)) {
+            $vote['0'] = 0;
+        }
+        $question['vote'] = (object)$vote;
         // extract all answers
-        $answers = $queryResult->answers()->get()->map(function ($answer) {
+        $answers = $queryResult->answers()->with('user_votes')->get()->map(function ($answer) {
             // extracting answer attributes, its user and formatting date of answer
             $returnable = Arr::only($answer->getAttributes(), ['id', 'content', 'created_at']);
             $returnable['created_at'] = Carbon::parse($returnable['created_at'])->format('jS M Y');
             $returnable['user'] = (object)Arr::only($answer->user()->get()->first()
                 ->getAttributes(), ['id', 'name', 'email']);
             // vote logic not implemented yet
-            $returnable['vote'] = 0;
+            $vote = $answer->getRelations()['user_votes']->map(function ($user) {
+                return $user->getOriginal()['pivot_vote'];
+            });
+            $vote = array_count_values($vote->toArray());
+            if (!array_key_exists(0, $vote)) {
+                $vote['0'] = 0;
+            }
+            if (!array_key_exists(1, $vote)) {
+                $vote['1'] = 0;
+            }
+            $returnable['vote'] = (object)$vote;
             return (object)$returnable;
         });
         return response(json_encode([
