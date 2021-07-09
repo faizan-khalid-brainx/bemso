@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\QuestionController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,8 +21,11 @@ Route::post('login', [App\Http\Controllers\Api\AuthController::class, 'login'])
 Route::get('logout', [App\Http\Controllers\Api\AuthController::class, 'logout'])
     ->name('auth.logout');
 
-Route::get('show-question',[App\Http\Controllers\QuestionController::class,'display'])
+Route::get('show-question', [App\Http\Controllers\QuestionController::class, 'display'])
     ->name('question.display');
+
+Route::get('questionPost', [App\Http\Controllers\QuestionController::class, 'index'])
+    ->name('question.index');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('test', function () {
@@ -30,4 +33,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::post('/question', [QuestionController::class, 'store'])
         ->name('question.store');
+    Route::post('/answer', [AnswerController::class, 'store'])
+        ->name('answer.store');
 });
