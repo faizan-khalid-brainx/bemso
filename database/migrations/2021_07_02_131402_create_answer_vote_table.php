@@ -18,6 +18,7 @@ class CreateAnswerVoteTable extends Migration
             $table->foreignId('answer_id');
             $table->foreignId('user_id');
             $table->boolean('vote');
+            $table->unique(['answer_id','user_id']);
         });
     }
 

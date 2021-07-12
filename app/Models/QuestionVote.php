@@ -10,5 +10,6 @@ class QuestionVote extends Pivot
     // overrides laravel default database naming convention for Eloquent
     protected $table = 'question_vote';
     protected $guarded = [];
+    public $timestamps = false;
     use HasFactory;
 }

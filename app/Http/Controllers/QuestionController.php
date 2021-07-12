@@ -6,6 +6,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class QuestionController extends Controller
 {
@@ -38,25 +39,37 @@ class QuestionController extends Controller
         $question['user'] = (object)Arr::only($queryResult->getRelation('user')
             ->getAttributes(), ['id', 'name', 'email']);
         // votes extracting question votes
-        $vote = $queryResult->getRelations()['user_votes']->map(function ($user) {
+        $isVoted = -1;
+        $vote = $queryResult->getRelations()['user_votes']->map(function ($user) use (&$isVoted) {
+            if ($user->getOriginal()['id'] == auth()->id()) {
+                $isVoted = $user->getOriginal()['pivot_vote'];
+            }
             return $user->getOriginal()['pivot_vote'];
         });
         $vote = array_count_values($vote->toArray());
         if (!array_key_exists(0, $vote)) {
             $vote['0'] = 0;
         }
+        if (!array_key_exists(1, $vote)) {
+            $vote['1'] = 0;
+        }
         $question['vote'] = (object)$vote;
+        $question['isVoted'] = $isVoted;
         // extract all answers
         $answers = $queryResult->answers()->with('user_votes')->get()->map(function ($answer) {
             // extracting answer attributes, its user and formatting date of answer
+            $Voted = -1;
             $returnable = Arr::only($answer->getAttributes(), ['id', 'content', 'created_at']);
             $returnable['created_at'] = Carbon::parse($returnable['created_at'])->format('jS M Y');
             $returnable['user'] = (object)Arr::only($answer->user()->get()->first()
                 ->getAttributes(), ['id', 'name', 'email']);
-            // vote logic not implemented yet
-            $vote = $answer->getRelations()['user_votes']->map(function ($user) {
+            $vote = $answer->getRelations()['user_votes']->map(function ($user) use (&$Voted) {
+                if ($user->getOriginal()['id'] == auth()->id()) {
+                    $Voted = $user->getOriginal()['pivot_vote'];
+                }
                 return $user->getOriginal()['pivot_vote'];
             });
+            $returnable['isVoted'] = $Voted;
             $vote = array_count_values($vote->toArray());
             if (!array_key_exists(0, $vote)) {
                 $vote['0'] = 0;
@@ -67,6 +80,7 @@ class QuestionController extends Controller
             $returnable['vote'] = (object)$vote;
             return (object)$returnable;
         });
+        log::info($answers);
         return response(json_encode([
             'question' => $question,
             'answers' => $answers]), 200);

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\AnswerVoteController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\QuestionVoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,15 +26,20 @@ Route::get('logout', [App\Http\Controllers\Api\AuthController::class, 'logout'])
 Route::get('show-question', [App\Http\Controllers\QuestionController::class, 'display'])
     ->name('question.display');
 
-Route::get('questionPost', [App\Http\Controllers\QuestionController::class, 'index'])
-    ->name('question.index');
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('test', function () {
         return response(['message' => 'success'], 200);
     });
+    Route::get('questionPost', [App\Http\Controllers\QuestionController::class, 'index'])
+        ->name('question.index');
     Route::post('/question', [QuestionController::class, 'store'])
         ->name('question.store');
     Route::post('/answer', [AnswerController::class, 'store'])
         ->name('answer.store');
+    Route::post('/question-vote', [QuestionVoteController::class, 'store'])
+        ->name('question-answer.store');
+    Route::post('/answer-vote', [AnswerVoteController::class, 'store'])
+        ->name('question-answer.store');
 });
