@@ -6,6 +6,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class QuestionController extends Controller
 {
@@ -14,17 +15,18 @@ class QuestionController extends Controller
     {
         $questions = Question::with('user:id,email,name')
             ->select(['id', 'title', 'content', 'created_at', 'user_id'])
-            ->withCount('answers', 'user_votes')->get()
-            ->map(function ($question) {
-                // removing foreign key
-                unset($question['user_id']);
-                // formatting date
-                $question['created_at'] = Carbon::parse($question['created_at'])->format('jS M Y');
-                // adding user object
-                $question['user'] = (object)$question->getRelation('user')->get();
-                return (object)$question;
-            });
-        return response()->json(['questions' => $questions], 200);
+            ->withCount('answers', 'user_votes')->get();
+        $returnable = $questions->map(function ($question) {
+            $returnable = $question->getAttributes();
+            // removing foreign key
+            unset($returnable['user_id']);
+            // formatting date
+            $returnable['created_at'] = Carbon::parse($question['created_at'])->format('jS M Y');
+            // adding user object
+            $returnable['user'] = (object)$question['user']->getAttributes();
+            return (object)$returnable;
+        });
+        return response()->json(['questions' => $returnable], 200);
     }
 
     public function index(Request $request)
