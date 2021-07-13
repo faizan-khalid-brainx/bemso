@@ -24,7 +24,7 @@ class QuestionController extends Controller
                     ->getAttributes(), ['id', 'name', 'email']);
                 return (object)$returnable;
             });
-        return response(json_encode(['questions' => $questions]), 200);
+        return response()->json(['questions' => $questions], 200);
     }
 
     public function index(Request $request)
@@ -80,9 +80,9 @@ class QuestionController extends Controller
             $returnable['vote'] = (object)$vote;
             return (object)$returnable;
         });
-        return response(json_encode([
+        return response()->json([
             'question' => $question,
-            'answers' => $answers]), 200);
+            'answers' => $answers], 200);
     }
 
     public function store(Request $request)
@@ -93,6 +93,6 @@ class QuestionController extends Controller
         ]);
         $validatedData['user_id'] = auth()->id();
         $que = Question::create($validatedData);
-        return response(json_encode(['message' => "'Question published at' $que->created_at"]), 200);
+        return response()->json(['message' => "'Question published at' $que->created_at"], 200);
     }
 }

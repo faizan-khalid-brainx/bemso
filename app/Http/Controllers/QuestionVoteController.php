@@ -22,10 +22,10 @@ class QuestionVoteController extends Controller
         unset($validatedData['update']);
         if ($mode) {
             $returnable = (object)QuestionVote::create($validatedData);
-            return response(json_encode(['message' => "'Vote added' $returnable"]), 200);
+            return response()->json(['message' => "'Vote added' $returnable"], 200);
         } else {
             $returnable = QuestionVote::where($validatedData)->delete();
-            return response(json_encode(['message' => "'No of votes removed' $returnable"]), 200);
+            return response()->json(['message' => "'No of votes removed' $returnable"], 200);
         }
     }
 }
