@@ -19,5 +19,5 @@ Route::get('/', function () {
 
 //Route for testing controller functions
 Route::get('test', function () {
-    
+
 });

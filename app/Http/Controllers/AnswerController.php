@@ -15,6 +15,6 @@ class AnswerController extends Controller
         ]);
         $validatedData['user_id'] = auth()->id();
         $answer = Answer::create($validatedData);
-        response()->json(['message' => "'Answer published at' $answer->created_at"],200);
+        response()->json(['message' => "'Answer published at' $answer->created_at"], 200);
     }
 }
