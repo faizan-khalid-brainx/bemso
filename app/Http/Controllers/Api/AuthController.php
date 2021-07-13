@@ -18,17 +18,28 @@ class AuthController extends Controller
         ]);
         $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response(json_encode(['message' => 'Invalid Login Credentials']),401);
+            return response(json_encode(['message' => 'Invalid Login Credentials']), 401);
         }
         $user->tokens()->delete();
         auth()->login($user);
         return response(json_encode(['message' => 'Login Successful',
-            'token' => $user->createToken($request->email)->plainTextToken]),200);
+            'token' => $user->createToken($request->email)->plainTextToken]), 200);
     }
 
     public function logout(Request $request)
     {
         auth()->logout();
         return response(json_encode(['message' => "$request->bearerToken() logged out"]), 200);
+    }
+
+    public function checkUser(Request $request)
+    {
+        $tokens = auth()->user()->tokens();
+        foreach ($tokens as $token) {
+            if (Hash::check($request->bearerToken(), $token->planetext())) {
+                return response(json_encode(['message' => 'User Validated'], 200));
+            }
+        }
+        return response(json_encode(['message' => 'Invalid User']), 401);
     }
 }

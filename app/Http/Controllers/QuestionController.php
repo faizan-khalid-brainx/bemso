@@ -80,7 +80,6 @@ class QuestionController extends Controller
             $returnable['vote'] = (object)$vote;
             return (object)$returnable;
         });
-        log::info($answers);
         return response(json_encode([
             'question' => $question,
             'answers' => $answers]), 200);
