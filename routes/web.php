@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +19,5 @@ Route::get('/', function () {
 
 //Route for testing controller functions
 Route::get('test', function () {
-
+    
 });

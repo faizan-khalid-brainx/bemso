@@ -13,16 +13,15 @@ class QuestionController extends Controller
 
     public function display()
     {
-        $questions = Question::with('user')->withCount('answers', 'user_votes')->get()
+        $questions = Question::with('user:id,email,name')
+            ->select(['id', 'title', 'content', 'created_at','user_id'])
+            ->withCount('answers', 'user_votes')->get()
             ->map(function ($question) {
-                // create object and extract necessary attributes
-                $returnable = Arr::only($question->getAttributes(),
-                    ['id', 'title', 'content', 'created_at', 'answers_count', 'user_votes_count']);
+                unset($question['user_id']);
                 // formatting date
-                $returnable['created_at'] = Carbon::parse($returnable['created_at'])->format('jS M Y');
-                $returnable['user'] = (object)Arr::only($question->getRelation('user')
-                    ->getAttributes(), ['id', 'name', 'email']);
-                return (object)$returnable;
+                $question['created_at'] = Carbon::parse($question['created_at'])->format('jS M Y');
+                $question['user'] = (object)$question->getRelation('user')->get();
+                return (object)$question;
             });
         return response()->json(['questions' => $questions], 200);
     }
