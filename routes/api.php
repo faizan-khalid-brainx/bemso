@@ -27,19 +27,17 @@ Route::get('show-question', [App\Http\Controllers\QuestionController::class, 'di
     ->name('question.display');
 
 
-
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('test', function () {
-        return response(['message' => 'success'], 200);
-    });
     Route::get('questionPost', [App\Http\Controllers\QuestionController::class, 'index'])
         ->name('question.index');
-    Route::post('/question', [QuestionController::class, 'store'])
+    Route::post('question', [QuestionController::class, 'store'])
         ->name('question.store');
-    Route::post('/answer', [AnswerController::class, 'store'])
+    Route::post('answer', [AnswerController::class, 'store'])
         ->name('answer.store');
-    Route::post('/question-vote', [QuestionVoteController::class, 'store'])
+    Route::post('question-vote', [QuestionVoteController::class, 'store'])
         ->name('question-answer.store');
-    Route::post('/answer-vote', [AnswerVoteController::class, 'store'])
+    Route::post('answer-vote', [AnswerVoteController::class, 'store'])
         ->name('question-answer.store');
+    Route::get('user', [\App\Http\Controllers\Api\AuthController::class, 'checkUser'])
+        ->name('auth.check-user');
 });
