@@ -15,10 +15,13 @@ class QuestionVoteController extends Controller
             'vote' => 'required',
             'update' => 'required'
         ]);
+        // ADD USER_ID FIELD
         $validatedData['user_id'] = auth()->id();
+        // RENAME ID FIELD
         $validatedData['question_id'] = $validatedData['id'];
         unset($validatedData['id']);
         $mode = $validatedData['update'];
+        // REMOVE MODE FIELD
         unset($validatedData['update']);
         if ($mode) {
             $returnable = (object)QuestionVote::create($validatedData);
