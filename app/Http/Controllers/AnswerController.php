@@ -27,7 +27,7 @@ class AnswerController extends Controller
         Answer::where('id',$request->id)->update(['content' => $request->content]);
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $request->validate([
             'id' => 'required'

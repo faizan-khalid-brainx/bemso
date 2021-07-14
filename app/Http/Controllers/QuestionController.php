@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Question;
+use App\Models\QuestionVote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -68,15 +70,19 @@ class QuestionController extends Controller
             'id' => 'required',
             'content' => 'required'
         ]);
-        Question::where('id',$request->id)->update(['content' => $request->content]);
+        Question::where('id', $request->id)->update(['content' => $request->content]);
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
+//        dd($request->id);
         $request->validate([
             'id' => 'required'
         ]);
-        Question::where('id',$request->id)->delete();
+        QuestionVote::where('question_id',$request->id)->delete();
+        Answer::where('question_id',$request->id)->delete();
+        $rows = Question::where('id', $request->id)->delete();
+        return response()->json(['message' => "Deleted rows: $rows"], 200);
     }
 
 }

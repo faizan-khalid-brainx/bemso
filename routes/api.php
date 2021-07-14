@@ -41,4 +41,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('auth.user');
     Route::get('logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])
         ->name('auth.logout');
+    Route::put('question/edit',[QuestionController::class,'update'])
+        ->name('question.update');
+    Route::delete('question/delete',[QuestionController::class,'destroy'])
+        ->name('question.delete');
+    Route::put('answer/edit',[QuestionController::class,'update'])
+        ->name('answer.update');
+    Route::delete('question/delete',[QuestionController::class,'destroy'])
+        ->name('answer.destroy');
 });
