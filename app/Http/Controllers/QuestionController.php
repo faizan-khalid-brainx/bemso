@@ -61,4 +61,22 @@ class QuestionController extends Controller
         $que = Question::create($validatedData);
         return response()->json(['message' => "'Question published at' $que->created_at"], 200);
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'content' => 'required'
+        ]);
+        Question::where('id',$request->id)->update(['content' => $request->content]);
+    }
+
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        Question::where('id',$request->id)->delete();
+    }
+
 }
