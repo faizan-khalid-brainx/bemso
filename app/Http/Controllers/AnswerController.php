@@ -25,7 +25,8 @@ class AnswerController extends Controller
             'id' => 'required',
             'content' => 'required'
         ]);
-        Answer::where('id', $request->id)->update(['content' => $request->content]);
+        $response = Answer::where('id', $request->id)->update(['content' => $request->content]);
+        return response()->json(['message' => "Rows updated $response"], 200);
     }
 
     public function destroy(Request $request)
