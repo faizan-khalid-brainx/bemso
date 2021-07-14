@@ -45,8 +45,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('question.update');
     Route::delete('question/delete',[QuestionController::class,'destroy'])
         ->name('question.delete');
-    Route::put('answer/edit',[QuestionController::class,'update'])
+    Route::put('answer/edit',[AnswerController::class,'update'])
         ->name('answer.update');
-    Route::delete('question/delete',[QuestionController::class,'destroy'])
+    Route::delete('answer/delete',[AnswerController::class,'destroy'])
         ->name('answer.destroy');
 });

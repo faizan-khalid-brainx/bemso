@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\AnswerVote;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -24,7 +25,7 @@ class AnswerController extends Controller
             'id' => 'required',
             'content' => 'required'
         ]);
-        Answer::where('id',$request->id)->update(['content' => $request->content]);
+        Answer::where('id', $request->id)->update(['content' => $request->content]);
     }
 
     public function destroy(Request $request)
@@ -32,7 +33,10 @@ class AnswerController extends Controller
         $request->validate([
             'id' => 'required'
         ]);
-        Answer::where('id',$request->id)->delete();
+        AnswerVote::where('answer_id', $request->id)->delete();
+        $rows = Answer::where('id', $request->id)->delete();
+        return response()->json(['message' => "Deleted rows: $rows"], 200);
+
     }
 
 }
