@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -20,7 +21,7 @@ class AuthController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid Login Credentials'], 401);
         }
-        $user->tokens()->delete();
+//        $user->tokens()->delete();
         auth()->login($user);
         return response()->json(['message' => 'Login Successful',
             'token' => $user->createToken($request->email)->plainTextToken], 200);
@@ -28,18 +29,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        auth()->logout();
-        return response()->json(['message' => "$request->bearerToken() logged out"], 200);
+        if (auth()->check()){
+            auth()->user()->tokens()->delete();
+            return response()->json(['message' => "{$request->bearerToken()} logged out"], 200);
+        }else{
+            return response()->json(['message' => "Unauthorized"], 401);
+        }
     }
 
     public function checkUser(Request $request)
     {
-        $tokens = auth()->user()->tokens();
-        foreach ($tokens as $token) {
-            if (Hash::check($request->bearerToken(), $token->planetext())) {
-                return response()->json(['message' => 'User Validated'], 200);
-            }
-        }
-        return response()->json(['message' => 'Invalid User'], 401);
+        return response()->json(['message' => auth()->id()], 200);
     }
 }
