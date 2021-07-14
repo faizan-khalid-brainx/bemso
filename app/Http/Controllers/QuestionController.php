@@ -70,7 +70,8 @@ class QuestionController extends Controller
             'id' => 'required',
             'content' => 'required'
         ]);
-        Question::where('id', $request->id)->update(['content' => $request->content]);
+        $response = Question::where('id', $request->id)->update(['content' => $request->content]);
+        return response()->json(['message' => "Rows updated $response"], 200);
     }
 
     public function destroy(Request $request)
@@ -79,8 +80,8 @@ class QuestionController extends Controller
         $request->validate([
             'id' => 'required'
         ]);
-        QuestionVote::where('question_id',$request->id)->delete();
-        Answer::where('question_id',$request->id)->delete();
+        QuestionVote::where('question_id', $request->id)->delete();
+        Answer::where('question_id', $request->id)->delete();
         $rows = Question::where('id', $request->id)->delete();
         return response()->json(['message' => "Deleted rows: $rows"], 200);
     }
