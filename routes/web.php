@@ -18,6 +18,6 @@ Route::get('/', function () {
 });
 
 //Route for testing controller functions
-Route::get('test',function (){
-    dd(App\Models\Question::with('user')->get()[0]->getRelation('user'));
+Route::get('test', function () {
+
 });
