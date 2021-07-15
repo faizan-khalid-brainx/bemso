@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Question;
+use App\Models\QuestionVote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class QuestionController extends Controller
 {
@@ -61,4 +62,26 @@ class QuestionController extends Controller
         $que = Question::create($validatedData);
         return response()->json(['message' => "'Question published at' $que->created_at"], 200);
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'content' => 'required'
+        ]);
+        $response = Question::where('id', $request->id)->update(['content' => $request->content]);
+        return response()->json(['message' => "Rows updated $response"], 200);
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        QuestionVote::where('question_id', $request->id)->delete();
+        Answer::where('question_id', $request->id)->delete();
+        $rows = Question::where('id', $request->id)->delete();
+        return response()->json(['message' => "Deleted rows: $rows"], 200);
+    }
+
 }

@@ -17,18 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [App\Http\Controllers\Api\AuthController::class, 'login'])
+Route::post('login', [\App\Http\Controllers\Api\AuthController::class, 'login'])
     ->name('login');
 
-Route::get('logout', [App\Http\Controllers\Api\AuthController::class, 'logout'])
-    ->name('auth.logout');
-
-Route::get('show-question', [App\Http\Controllers\QuestionController::class, 'display'])
+Route::get('show-question', [QuestionController::class, 'display'])
     ->name('question.display');
 
+Route::get('logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])
+    ->name('auth.logout');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('questionPost', [App\Http\Controllers\QuestionController::class, 'index'])
+    Route::get('questionPost', [QuestionController::class, 'index'])
         ->name('question.index');
     Route::post('question', [QuestionController::class, 'store'])
         ->name('question.store');
@@ -39,5 +38,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('answer-vote', [AnswerVoteController::class, 'store'])
         ->name('question-answer.store');
     Route::get('user', [\App\Http\Controllers\Api\AuthController::class, 'checkUser'])
-        ->name('auth.check-user');
+        ->name('auth.user');
+    Route::get('logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])
+        ->name('auth.logout');
+    Route::put('question/edit',[QuestionController::class,'update'])
+        ->name('question.update');
+    Route::delete('question/delete',[QuestionController::class,'destroy'])
+        ->name('question.delete');
+    Route::put('answer/edit',[AnswerController::class,'update'])
+        ->name('answer.update');
+    Route::delete('answer/delete',[AnswerController::class,'destroy'])
+        ->name('answer.destroy');
 });
