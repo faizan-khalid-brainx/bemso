@@ -8,7 +8,6 @@ use App\Models\QuestionVote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class QuestionController extends Controller
 {
@@ -76,7 +75,6 @@ class QuestionController extends Controller
 
     public function destroy(Request $request)
     {
-//        dd($request->id);
         $request->validate([
             'id' => 'required'
         ]);
