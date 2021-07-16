@@ -26,12 +26,14 @@ Route::get('show-question', [QuestionController::class, 'display'])
 Route::get('logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])
     ->name('auth.logout');
 
-Route::get('questionPost', [QuestionController::class, 'index'])
+Route::get('/guest/questionPost', [QuestionController::class, 'index'])
     ->name('question.index');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('question', [QuestionController::class, 'store'])
         ->name('question.store');
+    Route::get('questionPost', [QuestionController::class, 'index'])
+        ->name('question.index');
     Route::post('answer', [AnswerController::class, 'store'])
         ->name('answer.store');
     Route::post('question-vote', [QuestionVoteController::class, 'store'])
