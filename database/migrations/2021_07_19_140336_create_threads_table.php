@@ -15,7 +15,7 @@ class CreateThreadsTable extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_group');
+            $table->boolean('is_group')->default(false);
             $table->string('thread_name');
             $table->string('thread_desc')->nullable();
             $table->timestamp('created_at');

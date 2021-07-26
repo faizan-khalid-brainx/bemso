@@ -23,6 +23,9 @@ class ThreadFactory extends Factory
     {
         return [
             //
+            'thread_name' => $this->faker->word(),
+            'thread_desc' => $this->faker->sentence(),
+            'created_at' => now(),
         ];
     }
 }
