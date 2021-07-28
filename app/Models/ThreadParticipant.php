@@ -10,4 +10,10 @@ class ThreadParticipant extends Model
     use HasFactory;
     protected $guarded = [];
     public $timestamps = false;
+
+    public function roles()
+    {
+        $this->hasOne(Role::class);
+    }
+
 }

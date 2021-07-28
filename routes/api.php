@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AnswerVoteController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionVoteController;
+use App\Http\Controllers\ThreadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,4 +53,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('answer.update');
     Route::delete('answer/delete',[AnswerController::class,'destroy'])
         ->name('answer.destroy');
+    Route::get('chat',[ThreadController::class,'index'])
+        ->name('thread.index');
 });
