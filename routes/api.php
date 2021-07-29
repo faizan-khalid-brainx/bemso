@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AnswerVoteController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionVoteController;
 use App\Http\Controllers\ThreadController;
@@ -55,4 +56,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('answer.destroy');
     Route::get('chat',[ThreadController::class,'index'])
         ->name('thread.index');
+    Route::get('thread-message/{id}',[MessageController::class,'index'])
+        ->name('message.index');
 });
