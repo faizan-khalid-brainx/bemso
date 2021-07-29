@@ -14,7 +14,7 @@ class ThreadController extends Controller
         $user = auth()->user();
         $returnable = $user->threads()->get();
         $returnable = $this->extract($returnable,['id','thread_name']);
-        return response()->json(['threads' => $returnable],200);
+        return response()->json(['threads' => $returnable,'user_id'=>$user->id],200);
     }
 
     private function extract(Collection $collection,$array){
