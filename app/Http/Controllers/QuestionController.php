@@ -69,7 +69,7 @@ class QuestionController extends Controller
             'id' => 'required',
             'content' => 'required'
         ]);
-        $response = Question::where('id', $request->id)->update(['content' => $request->content]);
+        $response = Question::where('id', $request->id)->update(['content' => $request['content']]);
         return response()->json(['message' => "Rows updated $response"], 200);
     }
 
