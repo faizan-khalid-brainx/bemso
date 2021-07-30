@@ -20,6 +20,18 @@ class MessageController extends Controller
         return response()->json(['messages' => $messages], 200);
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'thread_id' => 'required'
+        ]);
+        $message = Message::create(['sender_id' => auth()->id(),
+            'thread_id'=>$request['thread_id'],
+            'content'=>$request['content']]);
+        return response()->json(['message'=>'message sent'],200);
+    }
+
     private function extract(Collection $collection): Collection
     {
         $array = ['id', 'content', 'sent'];

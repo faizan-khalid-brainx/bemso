@@ -58,4 +58,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('thread.index');
     Route::get('thread-message/{id}',[MessageController::class,'index'])
         ->name('message.index');
+    Route::post('message',[MessageController::class,'store'])
+        ->name('message.store');
 });
