@@ -22,7 +22,7 @@ class CreateMessagesTable extends Migration
                 ->onUpdate('cascade')
                 ->onUpdate('cascade');
             $table->string('content');
-            $table->timestamp('sent')->default(now());
+            $table->timestamp('sent')->useCurrent();
         });
     }
 
