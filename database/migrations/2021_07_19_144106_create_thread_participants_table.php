@@ -24,7 +24,7 @@ class CreateThreadParticipantsTable extends Migration
             $table->foreignId('role_id')
                 ->nullable()
                 ->constrained('roles');
-            $table->timestamp('last_seen')->default(now());
+            $table->timestamp('last_seen')->useCurrent();
             $table->boolean('is_mutated')->default(false);
         });
     }

@@ -33,7 +33,7 @@ class ThreadController extends Controller
         // if no thread exist create and return otherwise return first found
         if ($thread_id === []){
             $thread = Thread::create(['thread_name'=>$user->name,
-                'thread_desc'=>'Lorem','created_at'=>now()]);
+                'created_at'=>now()]);
             $thread_id = $thread->id;
             ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>$user->id]);
             ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>auth()->id()]);
@@ -47,10 +47,9 @@ class ThreadController extends Controller
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $validatedData = $request->validate([
-            'participants' => 'required',
-            'groupName' => 'required'
+            'participants' => 'required|array',
+            'groupName' => 'required|string'
         ]);
-//        dd($validatedData['participants']);
         if ($validatedData['groupName'] !== ''){
             $thread = Thread::create(['is_group'=>1,
                 'thread_name'=>$validatedData['groupName'],
@@ -63,10 +62,6 @@ class ThreadController extends Controller
         }
         $thread_id = $thread->id;
         $thread->users()->attach([...$validatedData['participants'],...[auth()->id()]]);
-//        foreach ($validatedData['participant'] as $participant){
-//            ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>$participant]);
-//        }
-//        ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>auth()->id()]);
         return response()->json(['threadId'=>$thread_id],200);
     }
 
