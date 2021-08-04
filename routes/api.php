@@ -6,6 +6,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionVoteController;
 use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,4 +61,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('message.index');
     Route::post('message',[MessageController::class,'store'])
         ->name('message.store');
+    Route::get('users/all',[UserController::class,'index'])
+        ->name('user.index');
 });
