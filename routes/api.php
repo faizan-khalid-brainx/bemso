@@ -59,6 +59,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('thread.index');
     Route::get('chat/{user}',[ThreadController::class,'create'])
         ->name('thread.create');
+    Route::post('chat/group',[ThreadController::class,'store'])
+        ->name('thread.store');
     Route::get('thread-message/{id}',[MessageController::class,'index'])
         ->name('message.index');
     Route::post('message',[MessageController::class,'store'])

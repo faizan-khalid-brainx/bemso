@@ -44,6 +44,32 @@ class ThreadController extends Controller
             return response()->json(['threadId'=>$thread_id],200);
     }
 
+    public function store(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validatedData = $request->validate([
+            'participants' => 'required',
+            'groupName' => 'required'
+        ]);
+//        dd($validatedData['participants']);
+        if ($validatedData['groupName'] !== ''){
+            $thread = Thread::create(['is_group'=>1,
+                'thread_name'=>$validatedData['groupName'],
+                'created_at'=>now()]);
+        }else{
+            $thread = Thread::create(['is_group'=>1,
+                'thread_name'=>'Lorem',
+                'created_at'=>now()]);
+            Thread::where('id',$thread->id)->update(['thread_name'=>"'Group '+$thread->id"]);
+        }
+        $thread_id = $thread->id;
+        $thread->users()->attach([...$validatedData['participants'],...[auth()->id()]]);
+//        foreach ($validatedData['participant'] as $participant){
+//            ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>$participant]);
+//        }
+//        ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>auth()->id()]);
+        return response()->json(['threadId'=>$thread_id],200);
+    }
+
     private function extract(Collection $collection,$array){
         return $collection->map(function ($thread) use ($array) {
             return (object)Arr::only($thread->getAttributes(),$array);

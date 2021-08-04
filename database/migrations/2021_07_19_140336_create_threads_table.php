@@ -18,7 +18,7 @@ class CreateThreadsTable extends Migration
             $table->boolean('is_group')->default(false);
             $table->string('thread_name');
             $table->string('thread_desc')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
