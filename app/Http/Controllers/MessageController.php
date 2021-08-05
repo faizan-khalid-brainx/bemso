@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMessage;
 use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,7 +30,12 @@ class MessageController extends Controller
         $message = Message::create(['sender_id' => auth()->id(),
             'thread_id'=>$request['thread_id'],
             'content'=>$request['content']]);
+        $this->report();
         return response()->json(['message'=>'message sent'],200);
+    }
+
+    public function report(){
+        event(new NewMessage('helloworld'));
     }
 
     private function extract(Collection $collection): Collection
