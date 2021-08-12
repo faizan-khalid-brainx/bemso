@@ -18,4 +18,8 @@ class Thread extends Model
             ,'user_id','id','id');
     }
 
+    public function threadParticipants()
+    {
+        return $this->hasMany(ThreadParticipant::class,'thread_id');
+    }
 }

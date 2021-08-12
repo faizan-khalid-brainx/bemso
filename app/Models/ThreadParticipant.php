@@ -13,7 +13,12 @@ class ThreadParticipant extends Model
 
     public function roles()
     {
-        $this->hasOne(Role::class);
+        return $this->hasOne(Role::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class,'user_id');
     }
 
 }
