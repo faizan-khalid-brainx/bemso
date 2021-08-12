@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NewMessage;
 use App\Models\Message;
+use App\Models\Thread;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -30,6 +31,7 @@ class MessageController extends Controller
         $message = Message::create(['sender_id' => auth()->id(),
             'thread_id'=>$request['thread_id'],
             'content'=>$request['content']]);
+        Thread::where('id', $request['thread_id'])->update(['updated_at' => now()]);
         $this->report();
         return response()->json(['message'=>'message sent'],200);
     }

@@ -22,7 +22,7 @@ class ThreadController extends Controller
 //        }])->get();
         $returnable = Thread::with(['users'=>function($query) use($user){
             $query->where('user_id','<>',$user->id);
-        }])->orderBy('updated_at')->get();
+        }])->orderBy('updated_at','DESC')->get();
         $returnable = $this->extract($returnable,['id','thread_name','is_group']);
         return response()->json(['threads' => $returnable,'user_id'=>$user->id],200);
     }
