@@ -39,7 +39,7 @@ class ThreadController extends Controller
             ->where('is_group',false)->get()->toArray();
         // if no thread exist create and return otherwise return first found
         if ($thread_id === []){
-            $thread = Thread::create(['thread_name'=>$user->name,'created_at'=>now()]);
+            $thread = Thread::create(['created_at'=>now()]);
             $thread_id = $thread->id;
             ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>$user->id]);
             ThreadParticipant::create(['thread_id'=>$thread_id,'user_id'=>auth()->id()]);
@@ -62,9 +62,9 @@ class ThreadController extends Controller
                 'created_at'=>now()]);
         }else{
             $thread = Thread::create(['is_group'=>1,
-                'thread_name'=>'Lorem',
+//                'thread_name'=>'Lorem',
                 'created_at'=>now()]);
-            Thread::where('id',$thread->id)->update(['thread_name'=>"'Group '+$thread->id"]);
+//            Thread::where('id',$thread->id)->update(['thread_name'=>"'Group '+$thread->id"]);
         }
         $thread_id = $thread->id;
         $thread->users()->attach([...$validatedData['participants'],...[auth()->id()]]);
@@ -73,11 +73,10 @@ class ThreadController extends Controller
 
     private function extract(Collection $collection,$array){
         return $collection->map(function ($thread) use ($array) {
-            return (object)Arr::only($thread->getAttributes(),$array);
+            $returnable = (object)Arr::only($thread->getAttributes(),$array);
+            $returnable->names = $thread->getRelation('users')->pluck('name')->toArray();
+            return $returnable;
         });
     }
 
-    private function fixNames(Collection $collection){
-
-    }
 }
