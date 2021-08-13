@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class ThreadController extends Controller
 {
@@ -58,9 +57,7 @@ class ThreadController extends Controller
                 'created_at'=>now()]);
         }else{
             $thread = Thread::create(['is_group'=>1,
-//                'thread_name'=>'Lorem',
                 'created_at'=>now()]);
-//            Thread::where('id',$thread->id)->update(['thread_name'=>"'Group '+$thread->id"]);
         }
         $thread_id = $thread->id;
         $thread->users()->attach([...$validatedData['participants'],...[auth()->id()]]);
