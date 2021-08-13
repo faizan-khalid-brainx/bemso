@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Thread;
 use App\Models\ThreadParticipant;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -15,15 +16,10 @@ class ThreadController extends Controller
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = auth()->user();
-//        $returnable = Thread::with(['threadParticipants'=>function($query) use($user){
-//            $query->where('user_id','<>',$user->id)->with(['users'=>function($query) use ($user){
-//                $query->where('id','<>',$user->id);
-//            }]);
-//        }])->get();
         $returnable = Thread::with(['users'=>function($query) use($user){
             $query->where('user_id','<>',$user->id);
         }])->orderBy('updated_at','DESC')->get();
-        $returnable = $this->extract($returnable,['id','thread_name','is_group']);
+        $returnable = $this->extract($returnable,['id','thread_name','is_group','updated_at']);
         return response()->json(['threads' => $returnable,'user_id'=>$user->id],200);
     }
 
@@ -75,6 +71,8 @@ class ThreadController extends Controller
         return $collection->map(function ($thread) use ($array) {
             $returnable = (object)Arr::only($thread->getAttributes(),$array);
             $returnable->names = $thread->getRelation('users')->pluck('name')->toArray();
+            $returnable->updated_at = Carbon::parse($returnable->updated_at)
+                ->setTimezone('Asia/Karachi')->format('h:i A');
             return $returnable;
         });
     }
