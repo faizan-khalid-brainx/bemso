@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AnswerVoteController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionVoteController;
+use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,4 +55,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->name('answer.update');
     Route::delete('answer/delete',[AnswerController::class,'destroy'])
         ->name('answer.destroy');
+    Route::get('chat',[ThreadController::class,'index'])
+        ->name('thread.index');
+    Route::get('chat/{user}',[ThreadController::class,'create'])
+        ->name('thread.create');
+    Route::post('chat/group',[ThreadController::class,'store'])
+        ->name('thread.store');
+    Route::get('thread-message/{id}',[MessageController::class,'index'])
+        ->name('message.index');
+    Route::post('message',[MessageController::class,'store'])
+        ->name('message.store');
+    Route::get('users/all',[UserController::class,'index'])
+        ->name('user.index');
 });

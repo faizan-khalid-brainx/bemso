@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,9 @@ Route::get('/', function () {
 Route::get('test', function () {
 
 });
+
+Route::get('/new-message',[MessageController::class,'report'])
+    ->name('message.report');
+
+
+

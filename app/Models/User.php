@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -33,26 +34,32 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function answer_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function answer_votes(): BelongsToMany
     {
-        return $this->belongsToMany(Answer::class, 'answer_vote', 'answer_id',
-            'user_id', 'id', 'id');
+        return $this->belongsToMany(Answer::class, 'answer_vote', 'user_id',
+            'answer_id', 'id', 'id');
     }
 
-    public function question_votes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function question_votes(): BelongsToMany
     {
-        return $this->belongsToMany(Question::class, 'question_vote', 'question_id',
-            'user_id', 'id', 'id');
+        return $this->belongsToMany(Question::class, 'question_vote', 'user_id',
+            'question_id', 'id', 'id');
     }
 
-    public function questions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
     }
 
-    public function answers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
+    }
+
+    public function threads(): BelongsToMany
+    {
+        return $this->belongsToMany(Thread::class,'thread_participants','user_id',
+            'thread_id','id','id');
     }
 
     /**
